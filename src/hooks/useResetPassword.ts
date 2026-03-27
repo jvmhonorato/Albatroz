@@ -1,89 +1,63 @@
-import { useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import { getError } from "../utils/error";
-import { useSearchParams } from "next/navigation";
+import { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { ResetPasswordForm } from '../types';
+import { getError } from '../utils/error';
+import { validateResetPassword } from '../utils/password';
 
+const getQueryParam = (key: string): string | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return new URLSearchParams(window.location.search).get(key);
+};
 
 const useResetPassword = () => {
-    const searchParam = useSearchParams();
-    
-    
-    const [passwordError, setPasswordError] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  const router = useRouter();
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const submit = async ({
-    password,
-    confirmPassword,
-  }: {
-    password: string;
-    confirmPassword: string;
-  }) => {
+  const submit = async ({ password, confirmPassword }: ResetPasswordForm) => {
     setLoading(true);
+    setPasswordError('');
+    setConfirmPasswordError('');
 
-    // Reset errors
-    // (Reset error states here)
+    const errors = validateResetPassword({ password, confirmPassword });
+    setPasswordError(errors.passwordError);
+    setConfirmPasswordError(errors.confirmPasswordError);
+
+    if (errors.passwordError || errors.confirmPasswordError) {
+      setLoading(false);
+      return;
+    }
+
+    const email = getQueryParam('mail');
+    const signature = getQueryParam('signature');
+
+    if (!email || !signature) {
+      toast.error('Invalid recovery link');
+      setLoading(false);
+      return;
+    }
 
     try {
-        // Reset errors
-        setPasswordError('');
-        setConfirmPasswordError('');
-    
-        // Check if password is empty
-        if (!password) {
-          setPasswordError('Enter the new password');
-          setLoading(false);
-          return;
-        }
-        
-        // Check if password meets certain criteria (e.g., length)
-        if (password.length < 8) {
-          setPasswordError('The password must have at least 8 characters');
-          setLoading(false);
-          return;
-        }
-    
-        // Check if confirmPassword is empty
-        if (!confirmPassword) {
-          setConfirmPasswordError('Please confirm your password');
-          setLoading(false);
-          return;
-        }
-    
-        // Check if passwords match
-        if (password !== confirmPassword) {
-          setConfirmPasswordError('The passwords do not correspond');
-          setLoading(false);
-          return;
-        }
-    
-
-      // API request to reset password
-      await axios.post("/api/auth/reset-password", {
-        email: searchParam.get("mail"),
-        signature: searchParam.get("signature"),
-        password: password,
+      await axios.post('/api/auth/reset-password', {
+        email,
+        signature,
+        password,
         password_confirmation: confirmPassword,
       });
 
-      // Handle success
-      // (Handle success logic here)
-
-      toast.success("Password reset successful", { theme: "colored" });
-      setLoading(false);
+      toast.success('Password reset successful', { theme: 'colored' });
     } catch (error) {
-      // Handle error
-      // (Handle error logic here)
-
       toast.error(getError(error));
+    } finally {
       setLoading(false);
     }
   };
 
-  return { loading, submit };
+  return { loading, passwordError, confirmPasswordError, submit };
 };
 
 export default useResetPassword;

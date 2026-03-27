@@ -34,7 +34,7 @@ const ForgotPasswordScreen: React.FC = () => {
               {...register('email', {
                 required: 'Please enter a valid email ',
                 pattern: {
-                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
+                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i,
                   message: 'Please use a valid email format ',
                 },
               })}
@@ -58,6 +58,5 @@ const ForgotPasswordScreen: React.FC = () => {
 };
 
 export default ForgotPasswordScreen;
-
 
 

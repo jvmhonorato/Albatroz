@@ -5,10 +5,8 @@ import useResetPassword from "../hooks/useResetPassword";
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-  const { loading, submit } = useResetPassword();
+  const { loading, passwordError, confirmPasswordError, submit } = useResetPassword();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -48,7 +46,7 @@ const ResetPassword: React.FC = () => {
                 className="w-full bg-black p-2 rounded-lg text-white"
                 disabled={loading}
               >
-                {loading ? "Process.." : "Confirm"}
+                {loading ? "Processing..." : "Confirm"}
               </button>
             </div>
             <div className="mt-5 text-center">

@@ -2,11 +2,10 @@ import * as React from 'react';
 import { TParams } from '../types';
 
 const ForgotPasswordEmail = ({
-    params
-  }:{
-    params: TParams;
-    
-  }) => {
+  params,
+}: {
+  params: Readonly<TParams>;
+}) => {
   return (
     <div className="bg-white p-0 m-0 w-full h-full">
     <div className="hidden text-transparent leading-none max-h-0 max-w-0 opacity-0 overflow-hidden"></div>
@@ -35,10 +34,9 @@ const ForgotPasswordEmail = ({
                              Redefine password
                             </a>
                             <p className="mt-4">
-                             If the above button does not work, copy and paste the following link to your browser:
-                              <p>{params.url}</p>
+                              If the above button does not work, copy and paste the following link to your browser:
                             </p>
-                            <p className="break-words text-blue-600"></p>
+                            <p className="break-words text-blue-600">{params.url}</p>
                             <p className="mt-4">
                             Best regards<br />
                               
