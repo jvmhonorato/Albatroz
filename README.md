@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="image/albatroz-logo.png" alt="Albatroz Logo" width="140" />
+</div>
+
 # Albatroz
 
 A lightweight React toolkit for password recovery flows.
@@ -8,6 +12,11 @@ Albatroz provides ready-to-use hooks and UI components for:
 - password recovery email templates
 
 It is designed to plug into applications that already expose password recovery endpoints.
+
+## Documentation
+
+Full docs and usage guides:
+https://albatroz.vercel.app/
 
 ## Installation
 
